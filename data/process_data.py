@@ -4,6 +4,16 @@ from sqlalchemy import create_engine
 import numpy as np
 
 def load_data(messages_filepath, categories_filepath):
+    """load the data from command argument
+        
+        Parameters:
+        csv file :messages_filepath
+        csv file :categories_filepath
+        
+        Returns:
+        Merged csv file df
+        
+        """
     
     messages = pd.read_csv(messages_filepath)
     categories = pd.read_csv(categories_filepath)
@@ -12,6 +22,16 @@ def load_data(messages_filepath, categories_filepath):
     return df 
 
 def clean_data(df):
+    """Clean the csv file df
+        
+        Parameters:
+        csv file
+        
+        Returns:
+        Cleand csv file df
+        
+        """
+    
     categories = df.categories.str.split(pat=';',expand=True)
     row = categories.iloc[0,:]
     category_colnames = row.apply(lambda x:x[:-2])
@@ -32,6 +52,16 @@ def clean_data(df):
 
 
 def save_data(df, database_filename):
+    """Create an engine and load the df to sql
+        
+        Parameters:
+        df
+        the name of the database from a python argument
+        
+        Returns:
+        No returns
+        
+        """
     
     engine = create_engine('sqlite:///' + database_filename)
     df.to_sql('DataFrame', engine, index=False)  

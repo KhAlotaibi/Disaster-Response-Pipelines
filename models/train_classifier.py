@@ -19,6 +19,17 @@ from sklearn.tree import DecisionTreeClassifier
 nltk.download(['punkt', 'wordnet', 'averaged_perceptron_tagger'])
 
 def load_data(database_filepath, table= 'DataFrame'):
+    """load the data from database and the table name
+        
+        Parameters:
+        The filepath of the database,
+        The name of the table
+        
+        Returns:
+        X,Y extraxted from the table, and category columns names
+        
+        
+        """
     
     engine = create_engine(f'sqlite:///{database_filepath}')
     df = pd.read_sql_table(table, engine)
@@ -32,6 +43,16 @@ def load_data(database_filepath, table= 'DataFrame'):
 
 
 def tokenize(text):
+    """Function to tokenize the text messages
+        
+        Parameters:
+        text
+        
+        Returns:
+        cleaned tokenized text as a list object
+        
+        
+        """
     url_regex = 'http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+'
     detected_urls = re.findall(url_regex, text)
     for url in detected_urls:
@@ -49,6 +70,18 @@ def tokenize(text):
 
 
 def build_model():
+    """Function to build the model, create the pipeline and implement gridsearchcv
+        
+        Parameters:
+        No parameters
+        
+        Returns:
+        Model
+        
+        
+        """
+    
+    #Create the pipeline
     pipeline = Pipeline([
         ('vect', CountVectorizer(tokenizer=tokenize)),
         ('tfidf', TfidfTransformer()),
@@ -60,20 +93,29 @@ def build_model():
     parameters = {
             'vect__max_df': (0.5, 0.75, 1.0),
             'clf__estimator__min_samples_split': [2, 4],
-            'tfidf__use_idf': (True, False),
-#             'clf__estimator__n_estimators': [50, 100]
-    
+            'tfidf__use_idf': (True, False)
         }
 
     cv = GridSearchCV(pipeline, param_grid=parameters)
-    # best partams: (cv.best_params_)
-    #       {'tfidf__use_idf': False,
-    #       'vect__max_df': 0.75,
-    #       'vect__max_features': 1000}
     return cv
 
 
 def evaluate_model(model, X_test, Y_test, category_columns):
+    """Function to evaluate the model and return the classification report
+        
+        Parameters:
+        The model,
+        X_test,
+        Y_test,
+        category columns names
+        
+        
+        Returns:
+        Prints the classification report
+        
+        
+        """
+    
     y_pred = model.predict(X_test)
     
     for col in range(0, len(category_columns)):
@@ -82,6 +124,19 @@ def evaluate_model(model, X_test, Y_test, category_columns):
 
 
 def save_model(model, model_filepath):
+    """Function to save the model as a pickle file
+        
+        Parameters:
+        The model,
+        The model file path as python argument
+        
+        
+        Returns:
+        Save the model.
+        
+        
+        """
+    
     pickle.dump(model, open(model_filepath, 'wb'))
 
 
