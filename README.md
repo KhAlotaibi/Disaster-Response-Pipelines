@@ -3,6 +3,16 @@
 ### Summary
 This project is part of Udacity's Data Science Nanodegree, the project includes the ETL process and the usage of Machine Learning Pipeline, and a web app to show the classification results. 
 
+## File Description
+# 1- run.py
+A flask web app to show classification results and visualization.
+# 2- process_data.py 
+A python file contains the Extract,Transform,Load process 
+# 3- train_classifier.py
+A python file where I load the data from the database and build the model and the pipeline. 
+
+
+
 ### Instructions:
 1. Run the following commands in the project's root directory to set up your database and model.
 
