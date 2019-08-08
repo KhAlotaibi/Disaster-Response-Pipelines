@@ -1,5 +1,8 @@
 # Disaster Response Pipeline Project
 
+### Summary
+This project is part of Udacity's Data Science Nanodegree, the project includes the ETL process and the usage of Machine Learning Pipeline, and a web app to show the classification results. 
+
 ### Instructions:
 1. Run the following commands in the project's root directory to set up your database and model.
 
